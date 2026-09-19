@@ -19,12 +19,10 @@ jobs:
 
     - name: Setup Toolchain (Clang 13)
       run: |
-        mkdir -p clang-13/aaa
-        cd clang-13/aaa
+        mkdir -p clang-13
+        cd clang-13
         # Mengunduh Google Clang resmi yang valid (Android NDK r23/r24)
-        wget -q https://googlesource.com
-        tar -xf clang-r433479.tar.gz
-        rm clang-r433479.tar.gz
+        git clone https://github.com/kdrag0n/proton-clang aaa
 
     - name: Compile Kernel
       run: |
