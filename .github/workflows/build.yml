@@ -1,0 +1,38 @@
+name: Build Kernel Online (Merlin Kali Nethunter)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-kernel:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+      with:
+        ref: nethunter
+
+    - name: Install Compiling Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y bc bison build-essential ccache clang cpio flex libelf-dev libssl-dev lz4 make libncurses-dev git libncurses5 openjdk-11-jdk zip
+
+    - name: Setup Toolchain (Clang 13)
+      run: |
+        mkdir -p clang-13/aaa
+        cd clang-13/aaa
+        # Mengunduh Google Clang resmi yang valid (Android NDK r23/r24)
+        wget -q https://googlesource.com
+        tar -xf clang-r433479.tar.gz
+        rm clang-r433479.tar.gz
+
+    - name: Compile Kernel
+      run: |
+        chmod +x *.sh
+        ./merlin.sh
+
+    - name: Upload Flashable Kernel ZIP
+      uses: actions/upload-artifact@v4
+      with:
+        name: Nethunter-APatch-Kernel-RedmiNote9
+        path: AnyKernel3-master/*.zip
